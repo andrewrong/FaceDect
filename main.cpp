@@ -12,20 +12,20 @@ int main()
 	CascadeClassifier face;
 	string filename = "./data/cascade.txt";
 	face.LoadDefaultCascade(filename);
-	printf("count:%d\n",face.count);
-	IntImage img;
-	FILE* output  = fopen("./out.txt","a");
 	cvNamedWindow("face",CV_WINDOW_AUTOSIZE);
+
+	IntImage img;
 	CvCapture* capture = cvCreateCameraCapture(0);
+
 	if(capture == NULL)
 	{
-		fprintf(output,"error capture is null!\n");
+		fprintf(stderr,"error capture is null!\n");
 		return -1;
 	}
-	fclose(output);
+
 	IplImage* frame ;
 	string imageName = "./9.bmp";
-	//string imageName2 = "/home/andrew/8.bmp";
+
 	while(1)
 	{
 		frame = cvQueryFrame(capture);
@@ -33,14 +33,21 @@ int main()
 		{
 			break;
 		}
+#if 0
 		cvSaveImage(imageName.c_str(),frame);
 		img.Load(imageName.c_str());
+#endif
+		img.IplImageToIntImage(frame);
 		face.ApplyOriginalSize(img,"./data/cascade.txt.range");
-		img.Save(imageName);
-		cvShowImage("face",cvLoadImage(imageName.c_str(),0));
-		//cvShowImage("face",frame);
+		//img.Save(imageName);
+		//cvShowImage("face",cvLoadImage(imageName.c_str(),0));
+		cvShowImage("face",img.IntImageToIplImage());
 		char c = cvWaitKey(10);
+		if(c == 27)
+		{
+		    break;
+		}
 	}	
 
-    return 0;
+	return 0;
 }

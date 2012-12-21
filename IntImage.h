@@ -28,9 +28,9 @@ public:
 	void Resize(IntImage &result,  REAL ratio) const;
 	void Copy(const IntImage& source);
 	void Load(const std::string& filename);
-//	void OpencvLoad(IplImage* img);
+	void IplImageToIntImage(IplImage* img);
 	void Save(const std::string& filename) const;
-//	IplImage* OpencvSave() const;
+	IplImage* IntImageToIplImage() const;
 
 public:
 	int height; // height, or, number of rows of the image
