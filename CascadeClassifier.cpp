@@ -7,8 +7,7 @@
 using namespace std;
 #include "CascadeClassifier.h"
 
-
-
+REAL mean_min,mean_max,sq_min,sq_max,var_min,var_max;
 
 CascadeClassifier::CascadeClassifier():count(0),ac(NULL)
 {
@@ -50,13 +49,16 @@ void CascadeClassifier::WriteToFile(ofstream& f) const
 	for(int i=0;i<count;i++) ac[i].WriteToFile(f);
 }
 
-void CascadeClassifier::LoadDefaultCascade(string& cascade_filename)
+void CascadeClassifier::LoadDefaultCascade(string& cascade_filename,string& cascade_filename_range)
 {
 	ifstream f;
-
+	ifstream frange;
 	f.open(cascade_filename.c_str());
+	frange.open(cascade_filename_range.c_str());
+	frange>>mean_min>>mean_max>>sq_min>>sq_max>>var_min>>var_max;
 	ReadFromFile(f);
 	f.close();
+	frange.close();
 }
 
 void CascadeClassifier::DrawResults(IntImage& image,const vector<MRect>& results) const
@@ -88,7 +90,7 @@ void CascadeClassifier::DrawResults(IntImage& image,const vector<MRect>& results
 	}
 }
 
-void CascadeClassifier::ApplyOriginalSize(IntImage& original,const string filename) 
+void CascadeClassifier::ApplyOriginalSize(IntImage& original,vector<MRect>& results) 
 {
 	IntImage procface;
 	IntImage image,square;
@@ -96,12 +98,6 @@ void CascadeClassifier::ApplyOriginalSize(IntImage& original,const string filena
 	int result;
 	MRect rect;
 	REAL ratio;
-	vector<MRect> results;
-	REAL mean_min,mean_max,sq_min,sq_max,var_min,var_max;
-	
-	ifstream openfile(filename.c_str(),ios_base::in);
-	openfile>>mean_min>>mean_max>>sq_min>>sq_max>>var_min>>var_max;
-	openfile.close();
 
 	procface.Copy(original);
 	ratio = 1.0;

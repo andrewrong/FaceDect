@@ -11,6 +11,7 @@
 
 const int sx = 24;
 const int sy = 24;
+extern REAL mean_min,mean_max,sq_min,sq_max,var_min,var_max;
 
 struct CascadeClassifier
 {
@@ -24,8 +25,8 @@ struct CascadeClassifier
 
 	void WriteToFile(std::ofstream& f) const;
 	void ReadFromFile(std::ifstream& f);
-	void LoadDefaultCascade(std::string& cascade_filename);
-	virtual void ApplyOriginalSize(IntImage& original,const std::string filename) ;
+	void LoadDefaultCascade(std::string& cascade_filename,std::string& cascade_filename_range);
+	virtual void ApplyOriginalSize(IntImage& original,std::vector<MRect>& results) ;
 	void DrawResults(IntImage& image, const std::vector<MRect>& results) const;
 };
 
